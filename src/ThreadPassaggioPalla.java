@@ -9,25 +9,29 @@ public class ThreadPassaggioPalla extends Thread {
 	private Vector<Socket> clients;
 	private ListClientPanel pListCLient;
 	
-	public ThreadPassaggioPalla(ServerSocket server, Vector<Socket> clients, ListClientPanel panel) {
+	private Socket newClient;
+	
+	public ThreadPassaggioPalla(ServerSocket server, ListClientPanel panel) {
+		
+		clients = new Vector <Socket> ();
 		
 		this.server = server;
-		this.clients = clients;
 		this.pListCLient = panel;
 		
-		for (Socket i : clients) {
-			DataOutputStream dos = new DataOutputStream(getOutputStream(i));
-			writeUTF(dos, "Inizio");
-		}
 	}
 
 	@Override
 	public void run() {
 		
+		for (Socket i : clients) {
+			DataOutputStream dos = new DataOutputStream(getOutputStream(i));
+			writeUTF(dos, "Inizio");
+		}
+		
 		DataOutputStream dos = new DataOutputStream(getOutputStream(clients.firstElement()));
 		writeUTF(dos, "d;0;3;1");
 		
-		Iterator<Socket> itr;
+		Iterator <Socket> itr;
 		
 		while(true) {
 			
@@ -79,11 +83,28 @@ public class ThreadPassaggioPalla extends Thread {
 							this.writeUTF(dos, "-1");
 						}
 					}
-					
-					
 				}
 			}
+			
+			if (newClient != null) {
+				clients.add(newClient);
+				newClient = null;
+			}
+			
 		}
+	}
+	
+	public void addClient(Socket newClient, boolean running) {
+		//clients.add(newClient);
+		
+		if (running) {
+			writeUTF(new DataOutputStream(getOutputStream(newClient)), "Inizio");
+			this.newClient = newClient;
+		}
+		else {
+			clients.add(newClient);
+		}
+		
 	}
 	
 	private String readUTF(DataInputStream dis) {

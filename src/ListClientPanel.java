@@ -49,7 +49,7 @@ public class ListClientPanel extends JPanel {
 
 	public void removeLabel(int port) {
 		
-		Iterator<JLabel> itr = labelClients.iterator();
+		Iterator <JLabel> itr = labelClients.iterator();
 		
 		while (itr.hasNext()) {
 			
