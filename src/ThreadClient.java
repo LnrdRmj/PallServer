@@ -2,7 +2,7 @@ public class ThreadClient {
 	
 	public static void main(String[] args) {
 		
-		new ClientFrame(400,400);
+		new ClientFrame(1200,800);
 		
 	}
 }

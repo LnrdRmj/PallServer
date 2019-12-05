@@ -34,7 +34,7 @@ public class ClientPanel extends JPanel implements ActionListener, Runnable, Cha
 	
 	// Attributi Pallina
 	
-	private int d = 40;
+	private int d = 100;
 	private int x = 0, y = 0;
 	private int xOffset = 3, yOffset = 1;
 	private final int timeOut = 10;
@@ -77,7 +77,7 @@ public class ClientPanel extends JPanel implements ActionListener, Runnable, Cha
 		lErrore.setForeground(Color.RED);
 		lErrore.setVisible(false);
 		
-		bConnetti.addChangeListener(this);
+		bConnetti.addActionListener(new ConnectListener(this));
 		
 		this.add(Box.createVerticalStrut(30));
 		this.add(lHost);
@@ -95,6 +95,30 @@ public class ClientPanel extends JPanel implements ActionListener, Runnable, Cha
 		
 	}
 	
+	public void createSocket() {
+		
+		try {
+			
+			socket = setSocket(tHost.getText(), Integer.parseInt(tPort.getText()));
+			
+			dis = getInputStream();
+			dos = getOutputStream();
+			
+			this.removeAll();
+			this.repaint();
+			this.revalidate();
+			
+			Thread thread = new Thread(this);
+			thread.start();
+			
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			this.showError("Connessione rifiutata");
+		}
+		
+	}
+	
 	@Override
 	public void run() {
 		if (streamRead().equals("Inizio")) {
@@ -106,16 +130,14 @@ public class ClientPanel extends JPanel implements ActionListener, Runnable, Cha
 	
 	@Override
 	public void stateChanged(ChangeEvent e) {
-
-		//System.out.println(e.toString());
 		
 		try {
-			if (socket == null) {
+			if (socket == null && e.getSource() instanceof JButton) {
 				socket = setSocket(tHost.getText(), Integer.parseInt(tPort.getText()));
 				
 				dis = getInputStream();
 				dos = getOutputStream();
-	
+				
 				this.removeAll();
 				this.repaint();
 				this.revalidate();

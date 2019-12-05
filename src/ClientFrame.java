@@ -13,7 +13,6 @@ public class ClientFrame extends JFrame implements WindowListener{
 		super("ClientFrame");
 		
 		this.setSize(width, height);
-		this.setLocation(width, 650);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(true);
 		
