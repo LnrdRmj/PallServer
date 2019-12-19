@@ -1,3 +1,4 @@
+package Client;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -39,7 +40,7 @@ public class ClientPanel extends JPanel implements ActionListener, Runnable, Cha
 	private int xOffset = 3, yOffset = 1;
 	private final int timeOut = 10;
 	
-	private Color colorePalla = new Color(0, 255, 0);
+	private Color colorePalla;
 	
 	public ClientPanel() {
 		
@@ -70,7 +71,7 @@ public class ClientPanel extends JPanel implements ActionListener, Runnable, Cha
 		
 		lHost.setFont(f);
 		lPort.setFont(f);
-
+		
 		f = new Font("Titolo", Font.BOLD, 18);
 		
 		lErrore.setFont(f);
@@ -184,10 +185,18 @@ public class ClientPanel extends JPanel implements ActionListener, Runnable, Cha
 			this.y = Integer.parseInt(st.nextToken());
 			this.xOffset = Integer.parseInt(st.nextToken());
 			this.yOffset = Integer.parseInt(st.nextToken());
+			SmoothColorChanger.setValues(
+			/*R*/							Integer.parseInt(st.nextToken()),
+			/*G*/							Integer.parseInt(st.nextToken()),
+			/*B*/							Integer.parseInt(st.nextToken()),
+			/*valueToChange(R-G-B)*/		Integer.parseInt(st.nextToken()), 
+			/*offsetColor*/					Integer.parseInt(st.nextToken())
+			);
 			
 			draw = true;
 			informationSent = false;
 		}
+		
 	}
 	
 	private void updateBallCoordinates() {
@@ -220,14 +229,24 @@ public class ClientPanel extends JPanel implements ActionListener, Runnable, Cha
 	}
 	
 	private String getBallInformation() {
-		if (xOffset < 0) return "s;" + this.y + ";" + this.xOffset + ";" + this.yOffset; 
-		else return "d;" + this.y + ";" + this.xOffset + ";" + this.yOffset;
+		
+		String info;
+		
+		if (xOffset < 0) info = "s;";
+		else info = "d;";
+		
+		info = info.concat(this.y + ";" + this.xOffset + ";" + this.yOffset + ";" + SmoothColorChanger.getR() + ";"+ SmoothColorChanger.getG() + ";"+ SmoothColorChanger.getB() + ";"+ SmoothColorChanger.getVTC() + ";"+ SmoothColorChanger.getOffset());
+		
+		return info;
+		
 	}
 	
 	public void paint(Graphics g) {
 		super.paint(g);
 		
 		if (draw) {
+			colorePalla = SmoothColorChanger.getColor();
+			
 			g.setColor(colorePalla);
 			g.fillOval(x, y, d, d);
 		}

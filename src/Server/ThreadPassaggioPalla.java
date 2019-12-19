@@ -1,3 +1,4 @@
+package Server;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -29,7 +30,16 @@ public class ThreadPassaggioPalla extends Thread {
 		}
 		
 		DataOutputStream dos = new DataOutputStream(getOutputStream(clients.firstElement()));
-		writeUTF(dos, "d;0;3;1");
+		// (d/s) = direzione della pallina (destra o sinistra);
+		// (0 - this.getWidth()) x della pallina;
+		// (n) XOffset della pallina;
+		// (n) YOffset della pallina;
+		// (0-255) R
+		// (0-255) G
+		// (0-255) B
+		// (0,1,2) Quale valore (RGB) cambiare
+		// (-,+) Aumentare o diminuire il valore (RGB)
+		writeUTF(dos, "d;0;3;1;252;3;3;1;1");
 		
 		Iterator <Socket> itr;
 		
