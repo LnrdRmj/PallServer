@@ -60,12 +60,17 @@ public class ListClientPanel extends JPanel {
 				System.out.println("Tolto il client sulla porta " + port);
 				itr.remove();
 				this.remove(i);
-				this.repaint();
-				this.revalidate();
+				updatePanel();
 				break;
 			}
 		}
 	}
+	
+	public void updatePanel() {
+		this.repaint();
+		this.revalidate();
+	}
+	
 }
 
 

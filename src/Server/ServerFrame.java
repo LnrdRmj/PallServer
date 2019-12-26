@@ -20,8 +20,9 @@ public class ServerFrame extends JFrame implements Runnable, ActionListener{
 	private Thread threadRaccoltaClient;
 	private ThreadPassaggioPalla threadPassaggioPalla;
 
-	private boolean running = false;
-
+	public static final int listClienPanel_index = 0;
+	public static final int bStart_index = 2;
+	
 	public ServerFrame() {
 
 		super("ServerFrame");
@@ -54,22 +55,23 @@ public class ServerFrame extends JFrame implements Runnable, ActionListener{
 		this.setBounds(0, 650, 400, 400);
 		this.setVisible(true);
 
-		this.threadPassaggioPalla = new ThreadPassaggioPalla(this.server, this.pClientPanel);
+		this.threadPassaggioPalla = new ThreadPassaggioPalla(this.server, panel);
 
 		// Thread iniziale per la raccolta dei clients
 		threadRaccoltaClient = new Thread(this);
 		threadRaccoltaClient.start();
-
+		threadPassaggioPalla.start();
+		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		//threadRaccoltaClient.interrupt();
 
-		this.threadPassaggioPalla.start();
-		running = true;
+		threadPassaggioPalla.launchBall();
 
 		bStart.setEnabled(false);
+		
 	}
 
 	@Override
@@ -79,7 +81,7 @@ public class ServerFrame extends JFrame implements Runnable, ActionListener{
 			String ip = newSocket.getInetAddress().getHostAddress();
 			int port = newSocket.getPort();
 			((ListClientPanel)pClientPanel).addClientLabel(ip, port);
-			threadPassaggioPalla.addClient(newSocket, running);
+			threadPassaggioPalla.addClient(newSocket);
 			clients.add(newSocket);
 		}
 	}

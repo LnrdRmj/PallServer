@@ -1,10 +1,3 @@
-/ClientFrame.class
-/ClientPanel.class
-/ConnectListener.class
-/ListClientPanel.class
-/Main.class
-/ServerFrame.class
-/ThreadClient.class
-/ThreadPassaggioPalla.class
 /Client/
 /Server/
+/OneServerThreeClients.class

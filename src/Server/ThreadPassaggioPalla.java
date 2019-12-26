@@ -8,21 +8,24 @@ public class ThreadPassaggioPalla extends Thread {
 
 	private ServerSocket server;
 	private Vector<Socket> clients;
-	private ListClientPanel pListCLient;
+	private JPanel panel;
 	
 	private Socket newClient;
 	
-	public ThreadPassaggioPalla(ServerSocket server, ListClientPanel panel) {
+	private int xOffset = 5, yOffset = 2;
+	
+	private boolean running = false;
+	
+	public ThreadPassaggioPalla(ServerSocket server, JPanel panel) {
 		
 		clients = new Vector <Socket> ();
 		
 		this.server = server;
-		this.pListCLient = panel;
+		this.panel= panel;
 		
 	}
 
-	@Override
-	public void run() {
+	public void launchBall() {
 		
 		for (Socket i : clients) {
 			DataOutputStream dos = new DataOutputStream(getOutputStream(i));
@@ -39,8 +42,16 @@ public class ThreadPassaggioPalla extends Thread {
 		// (0-255) B
 		// (0,1,2) Quale valore (RGB) cambiare
 		// (-,+) Aumentare o diminuire il valore (RGB)
-		writeUTF(dos, "d;0;3;1;252;3;3;1;1");
+		writeUTF(dos, "d;0;" + xOffset + ";" + yOffset + ";252;3;3;1;1");
 		
+		running = true;
+		
+	}
+	
+	@Override
+	public void run() {
+		
+		DataOutputStream dos;
 		Iterator <Socket> itr;
 		
 		while(true) {
@@ -63,8 +74,15 @@ public class ThreadPassaggioPalla extends Thread {
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
-						pListCLient.removeLabel(i.getPort());
+						
+						((ListClientPanel)(panel.getComponent(ServerFrame.listClienPanel_index))).removeLabel(i.getPort());
 						itr.remove();
+						
+						if (this.clients.size() == 0) {
+							running = false;
+							panel.getComponent(ServerFrame.bStart_index).setEnabled(true);
+						}
+						
 					}
 					else {
 						if (i.equals(clients.firstElement()) && letto.charAt(0) == 's') {
@@ -104,15 +122,14 @@ public class ThreadPassaggioPalla extends Thread {
 		}
 	}
 	
-	public void addClient(Socket newClient, boolean running) {
-		//clients.add(newClient);
+	public void addClient(Socket newClient) {
 		
 		if (running) {
 			writeUTF(new DataOutputStream(getOutputStream(newClient)), "Inizio");
 			this.newClient = newClient;
 		}
 		else {
-			clients.add(newClient);
+			this.newClient = newClient;
 		}
 		
 	}
