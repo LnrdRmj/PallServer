@@ -14,7 +14,7 @@ With the help of a server, local or not, u can pass a little colorfull ball thro
 2. Execute the file with whatever u have (u can execute how many clients u want)
 3. Than input the ip of the server (localhost is fine too) and its port and press "Connetti al server" (yes i'm ITALIANO)
 
-Whenever u're ready, on the server frame, press "Lancia la pallina" to launch the ball.
+Whenever u're ready, on the server frame, press "Lancia la pallina" to launch the ball (the button will get disabled the first time used).
 The ball wil start from the first client u connected to the second one to the third one and so on.
 
 # Features
@@ -22,3 +22,4 @@ The ball wil start from the first client u connected to the second one to the th
 1. U can disconnect the client whenever u want (if the clien that got disconnected has the ball the program gets tuck but i'll fix that)
 2. U can connect new clients even if the ball is already running
 3. The server displays all the client that are currently connected with itself
+4. If the ball has been launched and for whatever reason u disconnected all the clients from the server than the button to launch the ball gets re-enabled so that u can restart again if u want to
