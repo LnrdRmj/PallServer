@@ -19,6 +19,6 @@ The ball wil start from the first client u connected to the second one to the th
 
 # Features
 
-1. U can disconnect the client whenever u want (if it has the ball in it the program gets tuck but i'll fix that)
+1. U can disconnect the client whenever u want (if the clien that got disconnected has the ball the program gets tuck but i'll fix that)
 2. U can connect new clients even if the ball is already running
 3. The server displays all the client that are currently connected with itself
