@@ -14,7 +14,6 @@ public class ServerFrame extends JFrame implements Runnable, ActionListener{
 	public JButton bStart;
 
 	private ServerSocket server;
-	private Vector <Socket> clients;
 	private int serverPort = 6000;
 
 	private Thread threadRaccoltaClient;
@@ -29,7 +28,6 @@ public class ServerFrame extends JFrame implements Runnable, ActionListener{
 
 		// Instanzio dati utili alla connessione
 		this.server = getServer(serverPort);
-		clients = new Vector <Socket>();
 
 		// Panel padre
 		panel = new JPanel();
@@ -67,9 +65,9 @@ public class ServerFrame extends JFrame implements Runnable, ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		//threadRaccoltaClient.interrupt();
-
+		
 		threadPassaggioPalla.launchBall();
-
+		
 		bStart.setEnabled(false);
 		
 	}
@@ -82,7 +80,6 @@ public class ServerFrame extends JFrame implements Runnable, ActionListener{
 			int port = newSocket.getPort();
 			((ListClientPanel)pClientPanel).addClientLabel(ip, port);
 			threadPassaggioPalla.addClient(newSocket);
-			clients.add(newSocket);
 		}
 	}
 

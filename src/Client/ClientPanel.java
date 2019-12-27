@@ -200,7 +200,7 @@ public class ClientPanel extends JPanel implements ActionListener, Runnable, Cha
 	}
 	
 	private void updateBallCoordinates() {
-		   // Sbatte a destra
+		 // Sbatte a destra
 		if (x + xOffset > this.getWidth() - d && !informationSent && xOffset > 0) {
 			writeStream(getBallInformation());
 			if (this.streamRead().equals("Rimbalza")) {
@@ -231,6 +231,10 @@ public class ClientPanel extends JPanel implements ActionListener, Runnable, Cha
 	private String getBallInformation() {
 		
 		String info;
+		
+		if (informationSent) {
+			return "n";
+		}
 		
 		if (xOffset < 0) info = "s;";
 		else info = "d;";
@@ -304,7 +308,9 @@ public class ClientPanel extends JPanel implements ActionListener, Runnable, Cha
 
 	public void disconnect() {
 		if (socket != null) {
-			this.writeStream("Disconnessione");
+			this.writeStream("Disconnessione"); 
+			
+			this.writeStream(getBallInformation());
 			
 			try {
 				this.socket.close();

@@ -52,6 +52,7 @@ public class ThreadPassaggioPalla extends Thread {
 	public void run() {
 		
 		DataOutputStream dos;
+		DataInputStream dis;
 		Iterator <Socket> itr;
 		
 		while(true) {
@@ -62,13 +63,45 @@ public class ThreadPassaggioPalla extends Thread {
 				
 				Socket i = itr.next();
 				
-				DataInputStream dis = new DataInputStream(getInputStream(i));
+				dis = new DataInputStream(getInputStream(i));
 				if (available(dis) > 0) {
 					
 					String letto = readUTF(dis);
 					//System.out.println("Il client ha letto " +  "(" + i.getPort() + ") " + letto);
 					
 					if(letto.equals("Disconnessione")) {
+						
+						String info = readUTF(dis);
+						
+						// Se il client ha la pallina e ci sono altri client a cui passare la palla
+						if (!info.contentEquals("n") && clients.size() > 1) {
+							
+							dos = new DataOutputStream(getOutputStream(clients.get(clients.indexOf(i) + 1)));
+							
+							// Se il primo client viene chiuso con la pallina
+							if (i.equals(clients.firstElement())) {
+								
+								// allora dovrà rimbalzare per forza a destra
+								if (info.charAt(0) != 'd') info = info.replaceFirst("s", "d");
+								
+								writeUTF(dos, info);
+							}
+							// Se l'ultimo client viene chiuso con la pallina
+							else if (i.equals(clients.lastElement())) {
+								
+								// allora dovrà rimbalzare per forza a sinistra
+								if (info.charAt(0) != 's') info = info.replaceFirst("d", "s");
+								
+								writeUTF(dos, info);
+							}
+							else {
+								
+								if (info.charAt(0) == 's') 		this.writeUTF(dos, info);
+								else if(info.charAt(0) == 'd') 	this.writeUTF(dos, info);								
+								
+							}
+						}
+						
 						try {
 							i.close();
 						} catch (IOException e) {

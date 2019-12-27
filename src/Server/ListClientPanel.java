@@ -1,6 +1,8 @@
 package Server;
 import java.awt.*;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.*;
 
 import javax.swing.*;
@@ -9,6 +11,7 @@ public class ListClientPanel extends JPanel {
 
 	private JLabel lAscolto;
 	private JLabel lTitolo;
+	private JLabel lIpAddress;
 	private Vector <JLabel> labelClients;
 	
 	public ListClientPanel(int porta) {
@@ -21,6 +24,14 @@ public class ListClientPanel extends JPanel {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		// Label
+		try {
+			lIpAddress = new JLabel("Indirizzo ip del server: " + InetAddress.getLocalHost().getHostAddress());
+			
+		} catch (UnknownHostException e) {
+			lIpAddress = new JLabel("Insirizzo ip del server: ?" );
+		}
+		lIpAddress.setAlignmentX(CENTER_ALIGNMENT);
+		
 		lAscolto = new JLabel("Ascolto sulla porta " + porta);
 		lAscolto.setAlignmentX(CENTER_ALIGNMENT);
 		
@@ -32,6 +43,8 @@ public class ListClientPanel extends JPanel {
 		// Aggiungo i componenti e le spaziature tra i componenti
 		this.add(Box.createVerticalStrut(20));
 		this.add(lAscolto);
+		this.add(Box.createVerticalStrut(20));
+		this.add(lIpAddress);
 		this.add(Box.createVerticalStrut(20));
 		this.add(lTitolo);
 		this.add(Box.createVerticalStrut(20));
