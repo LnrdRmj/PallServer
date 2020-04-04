@@ -13,7 +13,6 @@ public class ThreadPassaggioPalla extends Thread {
 	private Socket newClient;
 	
 	private int xOffset = 5, yOffset = 2;
-	private int radius;
 	
 	private boolean running = false;
 	
@@ -22,7 +21,7 @@ public class ThreadPassaggioPalla extends Thread {
 		clients = new Vector <Socket> ();
 		
 		this.server = server;
-		this.panel = panel;
+		this.panel= panel;
 		
 	}
 
@@ -114,7 +113,7 @@ public class ThreadPassaggioPalla extends Thread {
 						
 						if (this.clients.size() == 0) {
 							running = false;
-							((ListClientPanel)(panel.getComponent(ServerFrame.listClienPanel_index))).enableButton(true);
+							panel.getComponent(ServerFrame.bStart_index).setEnabled(true);
 						}
 						
 					}

@@ -9,6 +9,8 @@ import javax.swing.*;
 import javax.swing.Timer;
 import javax.swing.event.*;
 
+import StartApp.Palla;
+
 public class ClientPanel extends JPanel implements ActionListener, Runnable, ChangeListener{
 	
 	private JLabel lHost;
@@ -179,19 +181,23 @@ public class ClientPanel extends JPanel implements ActionListener, Runnable, Cha
 			StringTokenizer st = new StringTokenizer(letto, ";");
 			String direzione = st.nextToken();
 			
-			if (direzione.equals("d")) x = -d;
-			else x = this.getWidth();
+//			if (direzione.equals("d")) x = -d;
+//			else x = this.getWidth();
 			
-			this.y = Integer.parseInt(st.nextToken());
-			this.xOffset = Integer.parseInt(st.nextToken());
-			this.yOffset = Integer.parseInt(st.nextToken());
-			SmoothColorChanger.setValues(
+			Palla.x = direzione.equals("d") == true ? -d : this.getWidth(); 
+			
+			Palla.y = Integer.parseInt(st.nextToken());
+			Palla.xOffset = Integer.parseInt(st.nextToken());
+			Palla.yOffset = Integer.parseInt(st.nextToken());
+			SmoothColorChanger scc = new SmoothColorChanger(
 			/*R*/							Integer.parseInt(st.nextToken()),
 			/*G*/							Integer.parseInt(st.nextToken()),
 			/*B*/							Integer.parseInt(st.nextToken()),
 			/*valueToChange(R-G-B)*/		Integer.parseInt(st.nextToken()), 
 			/*offsetColor*/					Integer.parseInt(st.nextToken())
 			);
+			
+			Palla.scc = scc;
 			
 			draw = true;
 			informationSent = false;
@@ -200,12 +206,19 @@ public class ClientPanel extends JPanel implements ActionListener, Runnable, Cha
 	}
 	
 	private void updateBallCoordinates() {
+		
+		int d = Palla.d;
+		int x = Palla.x;
+		int y = Palla.y;
+		int xOffset = Palla.xOffset;
+		int yOffset = Palla.yOffset;
+		
 		 // Sbatte a destra
 		if (x + xOffset > this.getWidth() - d && !informationSent && xOffset > 0) {
 			writeStream(getBallInformation());
 			if (this.streamRead().equals("Rimbalza")) {
 				informationSent = false;
-				xOffset *= -1;
+				Palla.xOffset *= -1;
 			}
 			else informationSent = true;
 		}
@@ -214,32 +227,29 @@ public class ClientPanel extends JPanel implements ActionListener, Runnable, Cha
 			writeStream(getBallInformation());
 			if (this.streamRead().equals("Rimbalza")) {
 				informationSent = false;
-				xOffset *= -1;
+				Palla.xOffset *= -1;
 			}
 			else informationSent = true;
 		}
 		
 		if ((x + xOffset < -d && xOffset < 0) || (x + xOffset > this.getWidth() && xOffset > 0)) draw = false;
 		
-		if (y + yOffset > this.getHeight() - d || y + yOffset < 0) yOffset *= -1;
+		if (y + yOffset > this.getHeight() - d || y + yOffset < 0) Palla.yOffset *= -1;
 		
-		x += xOffset;
-		y += yOffset;
+		Palla.x += Palla.xOffset;
+		Palla.y += Palla.yOffset;
 		
 	}
 	
 	private String getBallInformation() {
 		
-		String info;
+		String info = "";
 		
 		if (informationSent) {
 			return "n";
 		}
 		
-		if (xOffset < 0) info = "s;";
-		else info = "d;";
-		
-		info = info.concat(this.y + ";" + this.xOffset + ";" + this.yOffset + ";" + SmoothColorChanger.getR() + ";"+ SmoothColorChanger.getG() + ";"+ SmoothColorChanger.getB() + ";"+ SmoothColorChanger.getVTC() + ";"+ SmoothColorChanger.getOffset());
+		info = info.concat(Palla.getInfo());
 		
 		return info;
 		
@@ -249,10 +259,10 @@ public class ClientPanel extends JPanel implements ActionListener, Runnable, Cha
 		super.paint(g);
 		
 		if (draw) {
-			colorePalla = SmoothColorChanger.getColor();
+			colorePalla = Palla.getColor();
 			
 			g.setColor(colorePalla);
-			g.fillOval(x, y, d, d);
+			g.fillOval(Palla.x, Palla.y, Palla.d, Palla.d);
 		}
 	}
 	

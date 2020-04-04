@@ -4,18 +4,27 @@ import java.awt.Color;
 
 public class SmoothColorChanger {
 
-	private final static int maxValue = 252;
-	private final static int minValue = 3;
+	private final int maxValue = 252;
+	private final int minValue = 3;
 	
-	private static int R = maxValue-1;
-	private static int G = minValue-1;
-	private static int B = minValue-1;
+	private int R = maxValue;
+	private int G = minValue;
+	private int B = minValue;
 	
-	private static int valueToChange = 1;
-	private static int offset = 1; 
-	private static int multiplier = 3;
+	private int valueToChange = 1;
+	private int offset = 3;
 	
-	static Color getColor() {
+	public SmoothColorChanger(int R, int G, int B, int valueToChange, int offset) {
+		
+		this.R = R;
+		this.G = G;
+		this.B = B;
+		this.valueToChange = valueToChange;
+		this.offset = offset;
+		
+	}
+	
+	public Color getColor() {
 		
 		switch(valueToChange) {
 		case 0:
@@ -26,14 +35,14 @@ public class SmoothColorChanger {
 			// il verde
 			if (R >= maxValue) {
 				valueToChange = 2;
-				offset = -1 * multiplier;
+				offset *= -1;
 			}
 			// Se raggiungo il minimo del rosso
 			// allora dovrò iniziare ad aumentare
 			// il verde
 			else if(R <= minValue) {
 				valueToChange = 2;
-				offset = 1 * multiplier;
+				offset *= -1;
 			}
 			
 			break;
@@ -45,14 +54,14 @@ public class SmoothColorChanger {
 			// il rosso
 			if (G >= maxValue) {
 				valueToChange = 0;
-				offset = -1 * multiplier;
+				offset *= -1;
 			}
 			// Se raggiungo il minimo del verde
 			// allora dovrò iniziare ad aumentare
 			// il rosso
 			else if(G <= minValue) {
 				valueToChange = 0;
-				offset = 1 * multiplier;
+				offset *= -1;
 			}
 			
 			break;
@@ -64,14 +73,14 @@ public class SmoothColorChanger {
 			// il rosso
 			if (B >= maxValue) {
 				valueToChange = 1;
-				offset = -1 * multiplier;
+				offset *= -1;
 			}
 			// Se raggiungo il minimo del verde
 			// allora dovrò iniziare ad aumentare
 			// il rosso
 			else if(B <= minValue) {
 				valueToChange = 1;
-				offset = 1 * multiplier;
+				offset *= -1;
 			}
 			
 		}
@@ -80,30 +89,20 @@ public class SmoothColorChanger {
 		
 	}
 	
-	public static void setValues(int R, int G, int B, int valueToChange, int offset) {
-		
-		SmoothColorChanger.R = R;
-		SmoothColorChanger.G = G;
-		SmoothColorChanger.B = B;
-		SmoothColorChanger.valueToChange = valueToChange;
-		SmoothColorChanger.offset = offset;
-		
-	}
-	
-	public static int getR() {
+	public int getR() {
 		return R;
 	}
 	
-	public static int getG() {
+	public  int getG() {
 		return G;
 	}
-	public static int getB() {
+	public int getB() {
 		return B;
 	}
-	public static int getVTC() {
+	public int getValueToChange() {
 		return valueToChange;
 	}
-	public static int getOffset() {
+	public int getOffset() {
 		return offset;
 	}
 }

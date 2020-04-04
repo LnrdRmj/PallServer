@@ -1,22 +1,17 @@
 package Server;
+import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+import java.util.*;
 
 import javax.swing.*;
 
-public class ServerFrame extends JFrame implements Runnable{
+public class ServerFrame extends JFrame implements Runnable, ActionListener{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	private int width = 800;
-	private int height = 400;
-	
-	private JPanel rootPanel;
-		private ConfigurationPanel pConfig;
-		private ListClientPanel pClientPanel;
+	public JPanel panel;
+	public ListClientPanel pClientPanel;
+
+	public JButton bStart;
 
 	private ServerSocket server;
 	private int serverPort = 6000;
@@ -35,25 +30,30 @@ public class ServerFrame extends JFrame implements Runnable{
 		this.server = getServer(serverPort);
 
 		// Panel padre
-		rootPanel = new JPanel();
+		panel = new JPanel();
 		//panel.setBackground(Color.RED);
-		rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.X_AXIS));
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
 		// Istanzio i componenti
-		pClientPanel = new ListClientPanel(serverPort, this);
-		pConfig = new ConfigurationPanel();
+		pClientPanel = new ListClientPanel(serverPort);
+		bStart = new JButton("Lancia la pallina");
+		bStart.setAlignmentX(CENTER_ALIGNMENT);
 
 		// Assemblo il frame
-		rootPanel.add(pClientPanel);
-		rootPanel.add(pConfig);
-		
+		panel.add(pClientPanel);
+		panel.add(Box.createVerticalGlue());
+		panel.add(bStart);
+		panel.add(Box.createVerticalStrut(21));
+
+		// Aggiungo il listener al bottone
+		bStart.addActionListener(this);
 		// Preparo il Frame
-		this.add(rootPanel);
+		this.add(panel);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setBounds(0, 650, width, height);
+		this.setBounds(0, 650, 400, 400);
 		this.setVisible(true);
 
-		this.threadPassaggioPalla = new ThreadPassaggioPalla(this.server, rootPanel);
+		this.threadPassaggioPalla = new ThreadPassaggioPalla(this.server, panel);
 
 		// Thread iniziale per la raccolta dei clients
 		threadRaccoltaClient = new Thread(this);
@@ -62,12 +62,16 @@ public class ServerFrame extends JFrame implements Runnable{
 		
 	}
 
-	public void launchBall() {
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		//threadRaccoltaClient.interrupt();
 		
 		threadPassaggioPalla.launchBall();
 		
+		bStart.setEnabled(false);
+		
 	}
-	
+
 	@Override
 	public void run() {
 		while(true) {
