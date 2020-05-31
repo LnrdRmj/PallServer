@@ -19,7 +19,7 @@ The ball wil start from the first client u connected to the second one to the th
 
 # Features
 
-1. U can disconnect the client whenever u want (if the clients that got disconnected has the ball in it than the ball gets transferedto the next client)
+1. U can disconnect the client whenever u want (if the clients that got disconnected has the ball in it than the ball gets transfered to the next client)
 2. U can connect new clients even if the ball is already running
-3. The server displays all the client that are currently connected with itself
-4. If the ball has been launched and for whatever reason u disconnected all the clients from the server than the button to launch the ball gets re-enabled so that u can restart again if u want to
+3. The server displays all the client that are currently connected to itself
+4. If the ball has been launched and for whatever reason u disconnected all the clients from the server than the button to launch the ball gets re-enabled so that you can restart again if you want to
